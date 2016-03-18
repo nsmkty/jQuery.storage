@@ -9,7 +9,9 @@
 			settings = $.extend(true, settings, options);
 			if(settings.debug){ console.log('jQuery.Storage is init'); }
 		},
-		set:function(){
+		set:function(key, target){
+			if(key !== undefined){ settings.key = key; }
+			if(target !== undefined){ settings.target = target; }
 			var data = [];
 			this.each(function(){
 				if($(this).is(':text, select, textarea')){ data.push({name:$(this).attr('name'),value:$(this).val()}); }
@@ -23,7 +25,9 @@
 			if(settings.debug){ console.log(settings.target + 'Storage -> set {key:"' + settings.key + '",value:"' + save + '"'); }
 			return (this);
 		},
-		get:function(){
+		get:function(key, target){
+			if(key !== undefined){ settings.key = key; }
+			if(target !== undefined){ settings.target = target; }
 			var data;
 			if(settings.target === 'session'){ data = sessionStorage.getItem(settings.key); }
 			else{ data = localStorage.getItem(setting.key); }
