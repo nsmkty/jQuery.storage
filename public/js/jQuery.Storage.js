@@ -19,10 +19,12 @@
 					if($(this).is(':checked')){ data.push({name:$(this).attr('name'),value:$(this).val()}); }
 				}
 			});
-			var save = JSON.stringify(data);
-			if(settings.target === 'session'){ sessionStorage.setItem(settings.key, save); }
-			else{ localStorage.setItem(settings.key, save); }
-			if(settings.debug){ console.log(settings.target + 'Storage -> set {key:"' + settings.key + '",value:"' + save + '"'); }
+			if(data.length > 0){
+				var save = JSON.stringify(data);
+				if(settings.target === 'session'){ sessionStorage.setItem(settings.key, save); }
+				else{ localStorage.setItem(settings.key, save); }
+				if(settings.debug){ console.log(settings.target + 'Storage -> set {key:"' + settings.key + '",value:"' + save + '"'); }
+			}
 			return (this);
 		},
 		get:function(key, target){
@@ -31,13 +33,15 @@
 			var data;
 			if(settings.target === 'session'){ data = sessionStorage.getItem(settings.key); }
 			else{ data = localStorage.getItem(setting.key); }
-			var restore = JSON.parse(data);
-			$.each(restore, function(i, v){
-				if($('[name=' + v.name + ']').is(':radio')){ $(':radio[name=' + v.name + ']').val([v.value]); }
-				else if($('[name=' + v.name + ']').is(':checkbox')){ $(':checkbox[name=' + v.name + '][value=' + v.value + ']').prop('checked',true); }
-				else{ $('[name=' + v.name + ']').val(v.value); }
-			});
-			if(settings.debug){ console.log(settings.target + 'Storage -> get {key:"' + settings.key + '",value:"' + data + '"'); }
+			if(data !== null){
+				var restore = JSON.parse(data);
+				$.each(restore, function(i, v){
+					if($('[name=' + v.name + ']').is(':radio')){ $(':radio[name=' + v.name + ']').val([v.value]); }
+					else if($('[name=' + v.name + ']').is(':checkbox')){ $(':checkbox[name=' + v.name + '][value=' + v.value + ']').prop('checked',true); }
+					else{ $('[name=' + v.name + ']').val(v.value); }
+				});
+				if(settings.debug){ console.log(settings.target + 'Storage -> get {key:"' + settings.key + '",value:"' + data + '"'); }
+			}
 			return (this);
 		},
 		remove:function(key, target){
